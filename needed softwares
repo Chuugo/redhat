@@ -4,6 +4,13 @@ echo "desktop or server"
 read sd
 
 if [ "$sd" = "desktop" ]; then
+
+  echo "Did you downloaded vmware bundle to Download dir? yes or no?"
+  read kk
+
+  if [ "$kk" = "yes" ]; then
+          echo "desktop"
+
   cd ~/Downloads
 
   #UPDATE
@@ -52,11 +59,25 @@ if [ "$sd" = "desktop" ]; then
   cd ~/Downloads
 
   #vmware workstation
-  wget https://www.vmware.com/go/getworkstation-linux
+  echp "vmware bundle name"
+  read name
+  cmod +x $name
+  ./$name
+  
+  #htop
+  dnf install htop -y
+  
+  #conky with my own theme
+  dnf install conky
+  mv conky.conf 
   
   echo "GCC version"
   gcc --version
   echo "vmware license: ZF3R0-FHED2-M80TY-8QYGC-NPKYF"
+  else
+          echo "nope"
+          exit
+  fi
   
 elif [ "$sd" = "server" ]; then
         echo "server"
