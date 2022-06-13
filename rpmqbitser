@@ -1,0 +1,28 @@
+#!/bin/bash
+
+dnf install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm -y
+dnf install qbittorrent-nox -y
+firewall-cmd --permanent --add-port=8080/tcp
+systemctl reload firewalld
+
+read -p "Enter the user name : " username
+echo "Validating $username"
+
+#bekeri az username-et,es megnezi a passwd file-ban hogyletezik-e
+#ha letezik vissza ad egy 1-est es lefut, ha nem, egy 0-at es exitel
+
+if [ `grep -c $username /etc/passwd` -eq 0 ]
+then
+   echo "ERROR : PLEASE ENTER A VALID USERNAME."
+   echo "EXITING"
+   exit
+else
+
+sudo systemctl enable qbittorrent-nox@$username.service
+sudo systemctl start qbittorrent-nox@$username.service
+
+
+fi
+
+sudo systemctl status qbittorrent-nox@$username.service
+
