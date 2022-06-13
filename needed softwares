@@ -1,21 +1,65 @@
 #!/bin/bash
 
-#VISUAL STUDIO CODE
-sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
-sudo sh -c 'echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" > /etc/yum.repos.d/vscode.repo'
-dnf check-update
-sudo dnf install code
+echo "desktop or server"
+read sd
 
+if [ "$sd" = "desktop" ]; then
+  cd ~/Downloads
 
-#STEAM
-dnf install json-glib.i686 libdbusmenu.i686 fontconfig.i686 freetype.i686 glib2.i686 gtk2.i686 pango.i686 glibc.i686
-wget https://negativo17.org/repos/steam/epel-7/x86_64/libdbusmenu-gtk2-16.04.0-4.el7.i686.rpm
-rpm -U libdbusmenu-gtk2-16.04.0-4.el7.i686.rpm --nodeps
-dnf install libdrm.i686
-dnf install https://download1.rpmfusion.org/free/el/updates/8/x86_64/l/libva-intel-driver-2.1.0-4.el8.x86_64.rpm
-dnf install alsa-lib.i686 alsa-plugins-pulseaudio.i686 libXScrnSaver.i686 libXtst.i686 libatomic.i686 libcurl.i686 libdbusmenu-gtk3.i686 libpng12.i686 libvdpau.i686
-dnf install mesa-dri-drivers.i686 mesa-libGL.i686 nss.i686
-dnf install https://download1.rpmfusion.org/free/el/rpmfusion-free-release-8.noarch.rpm
-dnf install https://download1.rpmfusion.org/nonfree/el/rpmfusion-nonfree-release-8.noarch.rpm
-dnf install steam
+  #UPDATE
+  dnf update -y
+  
+  #epel8
+  dnf install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm -y
+  dnf update -y
+  
+  #GCC
+  dnf install gcc -y
+  dnf groupinstall "Development Tools" -y
 
+  #VISUAL STUDIO CODE
+  sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
+  sudo sh -c 'echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" > /etc/yum.repos.d/vscode.repo'
+  dnf check-update
+  sudo dnf install code -y
+  
+  #teamviewer
+  dnf install wget https://download.teamviewer.com/download/linux/teamviewer-host.x86_64.rpm -y
+  
+  #STEAM
+  dnf install json-glib.i686 libdbusmenu.i686 fontconfig.i686 freetype.i686 glib2.i686 gtk2.i686 pango.i686 glibc.i686 -y
+  wget https://negativo17.org/repos/steam/epel-7/x86_64/libdbusmenu-gtk2-16.04.0-4.el7.i686.rpm
+  rpm -U libdbusmenu-gtk2-16.04.0-4.el7.i686.rpm --nodeps
+  dnf install libdrm.i686 -y
+  dnf install https://download1.rpmfusion.org/free/el/updates/8/x86_64/l/libva-intel-driver-2.1.0-4.el8.x86_64.rpm -y
+  dnf install alsa-lib.i686 alsa-plugins-pulseaudio.i686 libXScrnSaver.i686 libXtst.i686 libatomic.i686 libcurl.i686 libdbusmenu-gtk3.i686 libpng12.i686 libvdpau.i686 -y
+  dnf install mesa-dri-drivers.i686 mesa-libGL.i686 nss.i686 -y
+  dnf install https://download1.rpmfusion.org/free/el/rpmfusion-free-release-8.noarch.rpm -y
+  dnf install https://download1.rpmfusion.org/nonfree/el/rpmfusion-nonfree-release-8.noarch.rpm -y
+  dnf install steam -y
+
+  #Discord
+  cd ~/
+  mkdir -p ~/.local/bin
+  wget "https://discordapp.com/api/download/canary?platform=linux&format=tar.gz" -O discord.tar.gz
+  tar -xvf discord.tar.gz -C ~/.local/bin
+  sudo ln -s ~/.local/bin/DiscordCanary/discord.png /usr/share/icons/discord.png
+  sudo ln -s ~/.local/bin/DiscordCanary/DiscordCanary /usr/bin
+  wget https://gist.githubusercontent.com/AdrianKoshka/a12ca0bfe2f334a9f208aff72f8738c3/raw/9d606ad7ce7cc1dd23f6a99993e2396540538a02/discord.desktop -O discord.desktop
+  mkdir -p ~/.local/share/applications/
+  mv ~/discord.desktop ~/.local/share/applications/
+  sudo ln -s ~/.local/share/applications/discord.desktop /usr/share/applications/discord.desktop
+  cd ~/Downloads
+
+  #vmware workstation
+  wget https://www.vmware.com/go/getworkstation-linux
+  
+  echo "GCC version"
+  gcc --version
+  echo "vmware license: ZF3R0-FHED2-M80TY-8QYGC-NPKYF"
+  
+elif [ "$sd" = "server" ]; then
+        echo "server"
+else
+        echo "Error"
+fi
