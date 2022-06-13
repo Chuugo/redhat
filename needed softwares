@@ -1,15 +1,10 @@
 #!/bin/bash
 
-echo "desktop or server"
-read sd
+echo "Did you downloaded vmware bundle to Download dir? yes or no?"
+read kk
 
-if [ "$sd" = "desktop" ]; then
-
-  echo "Did you downloaded vmware bundle to Download dir? yes or no?"
-  read kk
-
-  if [ "$kk" = "yes" ]; then
-          echo "desktop"
+if [ "$kk" = "yes" ]; then
+  echo "desktop"
 
   cd ~/Downloads
 
@@ -69,18 +64,19 @@ if [ "$sd" = "desktop" ]; then
   
   #conky with my own theme
   dnf install conky
-  mv conky.conf 
+  mv conky.conf .config/conky/conky.conf
   
+  #java
+  dnf install https://download.oracle.com/java/18/latest/jdk-18_linux-x64_bin.rpm -y
+  
+  #multimc
+  wget https://files.multimc.org/downloads/mmc-stable-lin64.tar.gz
+ 
   echo "GCC version"
   gcc --version
   echo "vmware license: ZF3R0-FHED2-M80TY-8QYGC-NPKYF"
-  else
-          echo "nope"
-          exit
-  fi
   
-elif [ "$sd" = "server" ]; then
-        echo "server"
-else
-        echo "Error"
-fi
+ else
+  echo "nope"
+  exit
+ fi
