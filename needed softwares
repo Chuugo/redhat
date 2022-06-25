@@ -54,7 +54,7 @@ if [ "$kk" = "yes" ]; then
   cd ~/Downloads
 
   #vmware workstation
-  echp "vmware bundle name"
+  echo "vmware bundle name"
   read name
   cmod +x $name
   ./$name
