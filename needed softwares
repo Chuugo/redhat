@@ -1,11 +1,13 @@
 #!/bin/bash
 
-echo "Did you downloaded vmware bundle to Download dir? yes or no?"
-read kk
-
-if [ "$kk" = "yes" ]; then
-  echo "desktop"
-
+read -p "Enter the user name : " username
+echo "Validating $username"
+if [ `grep -c $username /etc/passwd` -eq 0 ]
+then
+   echo "ERROR : PLEASE ENTER A VALID USERNAME."
+   echo "EXITING"
+   exit
+else
   cd ~/Downloads
 
   #UPDATE
@@ -18,7 +20,23 @@ if [ "$kk" = "yes" ]; then
   #GCC
   dnf install gcc -y
   dnf groupinstall "Development Tools" -y
+  
+  #PHP
+  dnf install php -y
+  
+  #mariadb
+  dnf install mariadb mariadb-server -y
 
+  #apache
+  dnf -y install httpd -y
+
+  #kvm
+  dnf group install --with-optional virtualization -y
+  systemctl start libvirtd
+  systemctl enable libvirtd
+  usermod -aG libvirt $username
+  
+  
   #VISUAL STUDIO CODE
   sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
   sudo sh -c 'echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" > /etc/yum.repos.d/vscode.repo'
@@ -52,12 +70,6 @@ if [ "$kk" = "yes" ]; then
   mv ~/discord.desktop ~/.local/share/applications/
   sudo ln -s ~/.local/share/applications/discord.desktop /usr/share/applications/discord.desktop
   cd ~/Downloads
-
-  #vmware workstation
-  echo "vmware bundle name"
-  read name
-  cmod +x $name
-  ./$name
   
   #htop
   dnf install htop -y
@@ -74,9 +86,5 @@ if [ "$kk" = "yes" ]; then
  
   echo "GCC version"
   gcc --version
-  echo "vmware license: ZF3R0-FHED2-M80TY-8QYGC-NPKYF"
-  
- else
-  echo "nope"
-  exit
- fi
+  echo "kvm kernel module"
+  lsmod | grep kvm
